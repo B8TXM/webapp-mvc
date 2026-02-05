@@ -32,13 +32,33 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void save(User user) {
+    public void save(String name, String email, Integer age) {
+
+        User user = new User();
+        user.setName(name.trim());
+        user.setEmail(email != null ? email.trim() : null);
+        user.setAge(age);
         userDao.save(user);
     }
 
     @Override
-    public void update(User user) {
-        userDao.update(user);
+    public void update(Long id, String name, String email, Integer age) {
+
+        User existingUser = userDao.findById(id);
+        if (existingUser == null) {
+            throw new IllegalArgumentException("User " + id + " not found");
+        }
+        if (name != null && !name.trim().isEmpty()) {
+            existingUser.setName(name.trim());
+        }
+        if (email != null && !email.trim().isEmpty()) {
+            existingUser.setEmail(email.trim());
+        }
+        if (age != null) {
+            existingUser.setAge(age);
+        }
+
+        userDao.update(existingUser);
     }
 
     @Override

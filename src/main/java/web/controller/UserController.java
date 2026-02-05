@@ -52,11 +52,7 @@ public class UserController {
             @RequestParam(required = false) String email,
             @RequestParam Integer age) {
 
-        User user = new User();
-        user.setName(name.trim());
-        user.setEmail(email != null ? email.trim() : null);
-        user.setAge(age);
-        userService.save(user);
+        userService.save(name, email, age);
 
         return "redirect:/users";
     }
@@ -78,21 +74,9 @@ public class UserController {
             @RequestParam(required = false) String email,
             @RequestParam(required = false) Integer age) {
 
-        User existingUser = userService.findById(id);
-        if (existingUser != null) {
-            if (name != null && !name.trim().isEmpty()) {
-                existingUser.setName(name.trim());
-            }
-            if (email != null && !email.trim().isEmpty()) {
-                existingUser.setEmail(email.trim());
-            }
-            if (age != null) {
-                existingUser.setAge(age);
-            }
-            userService.update(existingUser);
-        }
+        userService.update(id, name, email, age);
 
-        return "redirect:/users/view?id=" + existingUser.getId();
+        return "redirect:/users/view?id=" + id;
 
     }
 
